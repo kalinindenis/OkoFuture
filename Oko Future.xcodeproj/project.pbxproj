@@ -16,6 +16,8 @@
 		920BF13F29CC43CC001D40DA /* wraith.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 920BF13D29CC43CC001D40DA /* wraith.usdz */; };
 		920BF14129CC623D001D40DA /* ArViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920BF14029CC623D001D40DA /* ArViewController.swift */; };
 		920BF14329CC804A001D40DA /* hd1833.mov in Resources */ = {isa = PBXBuildFile; fileRef = 920BF14229CC804A001D40DA /* hd1833.mov */; };
+		9292EE3029D09A4500526C07 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */; };
+		92C377DE29CDD2170024DD85 /* avatar.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 92C377DD29CDD2170024DD85 /* avatar.usdz */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		920BF13D29CC43CC001D40DA /* wraith.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = wraith.usdz; sourceTree = "<group>"; };
 		920BF14029CC623D001D40DA /* ArViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArViewController.swift; sourceTree = "<group>"; };
 		920BF14229CC804A001D40DA /* hd1833.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = hd1833.mov; sourceTree = "<group>"; };
+		9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		92C377DD29CDD2170024DD85 /* avatar.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = avatar.usdz; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +50,7 @@
 		920BF11C29CC3D33001D40DA = {
 			isa = PBXGroup;
 			children = (
+				92C377DD29CDD2170024DD85 /* avatar.usdz */,
 				920BF14229CC804A001D40DA /* hd1833.mov */,
 				920BF13C29CC43CC001D40DA /* Girlo.usdz */,
 				920BF13D29CC43CC001D40DA /* wraith.usdz */,
@@ -68,6 +73,7 @@
 				920BF12829CC3D33001D40DA /* AppDelegate.swift */,
 				920BF12A29CC3D33001D40DA /* SceneDelegate.swift */,
 				920BF12C29CC3D33001D40DA /* GeneralViewController.swift */,
+				9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */,
 				920BF14029CC623D001D40DA /* ArViewController.swift */,
 				920BF13129CC3D34001D40DA /* Assets.xcassets */,
 				920BF13329CC3D34001D40DA /* LaunchScreen.storyboard */,
@@ -134,6 +140,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92C377DE29CDD2170024DD85 /* avatar.usdz in Resources */,
 				920BF14329CC804A001D40DA /* hd1833.mov in Resources */,
 				920BF13E29CC43CC001D40DA /* Girlo.usdz in Resources */,
 				920BF13F29CC43CC001D40DA /* wraith.usdz in Resources */,
@@ -150,6 +157,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				920BF12D29CC3D33001D40DA /* GeneralViewController.swift in Sources */,
+				9292EE3029D09A4500526C07 /* WelcomeViewController.swift in Sources */,
 				920BF12929CC3D33001D40DA /* AppDelegate.swift in Sources */,
 				920BF12B29CC3D33001D40DA /* SceneDelegate.swift in Sources */,
 				920BF14129CC623D001D40DA /* ArViewController.swift in Sources */,

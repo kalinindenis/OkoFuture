@@ -15,42 +15,44 @@ enum AvatarMode {
 
 final class GeneralViewController: UIViewController {
     
-    private var chooseModel = 1
+    public var chooseModel = 0
+    
+    public let arrayNameScene = ["Girlo.usdz", "avatar.usdz"]
     
     private var mode: AvatarMode = .general
     
-    private var sceneView: SCNView = {
+    public var sceneView: SCNView = {
         let scn = SCNView()
-        scn.allowsCameraControl = true
         scn.autoenablesDefaultLighting = true
+        scn.showsStatistics = true
         scn.antialiasingMode = .multisampling2X
         scn.backgroundColor = .clear
         return scn
     }()
     
-    private let sceneGirl: SCNScene = {
-        let sceneGirl: SCNScene = .init(named: "Girlo.usdz")!
-        return sceneGirl
-    }()
+    public var sceneGirl: SCNScene? = nil
+    public var sceneAvatar: SCNScene? = nil
     
-    private let sceneWraith: SCNScene = {
-        let sceneWraith: SCNScene = .init(named: "wraith.usdz")!
-        return sceneWraith
+    private let zoomInButton: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("+", for: .normal)
+        btn.setTitleColor(.white, for: .normal)
+        btn.backgroundColor = .black
+        btn.clipsToBounds = true
+        btn.layer.borderWidth = 2
+        btn.layer.borderColor = UIColor.white.cgColor
+        return btn
     }()
-    
-//    private let zoomInButton: UIButton = {
-//        let btn = UIButton()
-//        return btn
-//    }()
-//
-//    private let zoomOutButton: UIButton = {
-//        let btn = UIButton()
-//        return btn
-//    }()
 
-    private var interfaceBottomStack: UIStackView = {
-        let stk = UIStackView()
-        return stk
+    private let zoomOutButton: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("-", for: .normal)
+        btn.setTitleColor(.white, for: .normal)
+        btn.backgroundColor = .black
+        btn.clipsToBounds = true
+        btn.layer.borderWidth = 2
+        btn.layer.borderColor = UIColor.white.cgColor
+        return btn
     }()
     
     private let wardrobeButton: UIButton = {
@@ -110,16 +112,26 @@ final class GeneralViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        self.navigationItem.setHidesBackButton(true, animated:false)
         setupView()
         setupLayout()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        
+        if self.chooseModel == 0 {
+            self.sceneAvatar = nil
+        } else {
+            self.sceneGirl = nil
+        }
     }
     
     private func setupView() {
         
         view.backgroundColor = UIColor.systemMint
         view.addSubview(sceneView)
-//        view.addSubview(interfaceBottomStack)
         view.addSubview(firstModelWardrobeButton)
         view.addSubview(secondModelWardrobeButton)
         
@@ -127,10 +139,11 @@ final class GeneralViewController: UIViewController {
         view.addSubview(backWardrobeButton)
         view.addSubview(arViewButton)
         
-//        interfaceBottomStack.addArrangedSubview(firstModelWardrobeButton)
-//        interfaceBottomStack.addArrangedSubview(secondModelWardrobeButton)
+        view.addSubview(zoomInButton)
+        view.addSubview(zoomOutButton)
         
-        sceneView.scene = sceneGirl
+        let dragRotateGesture = UIPanGestureRecognizer(target: self, action: #selector(rotateDragY))
+        sceneView.addGestureRecognizer(dragRotateGesture)
         
         firstModelWardrobeButton.addTarget(self, action: #selector(tapFirst), for: .touchUpInside)
         secondModelWardrobeButton.addTarget(self, action: #selector(tapSecond), for: .touchUpInside)
@@ -139,6 +152,9 @@ final class GeneralViewController: UIViewController {
         backWardrobeButton.addTarget(self, action: #selector(tapBackWardrobe), for: .touchUpInside)
         
         arViewButton.addTarget(self, action: #selector(tapArView), for: .touchUpInside)
+        
+        zoomInButton.addTarget(self, action: #selector(tapZoomIn), for: .touchUpInside)
+        zoomOutButton.addTarget(self, action: #selector(tapZoomOut), for: .touchUpInside)
     }
     
     private func setupLayout() {
@@ -146,36 +162,73 @@ final class GeneralViewController: UIViewController {
         
         changeMode()
         
-        let weightButtonWardrobe: CGFloat = view.frame.width / 5
+        let weightSystemButton: CGFloat = view.frame.width / 5
+        let weightZoomButton: CGFloat = weightSystemButton / 1.8
         
-        firstModelWardrobeButton.frame = CGRect(x: weightButtonWardrobe/2, y: view.frame.height - weightButtonWardrobe - 20, width: weightButtonWardrobe, height: weightButtonWardrobe)
+        firstModelWardrobeButton.frame = CGRect(x: weightSystemButton/2, y: view.frame.height - weightSystemButton - 20, width: weightSystemButton, height: weightSystemButton)
         firstModelWardrobeButton.layer.cornerRadius = firstModelWardrobeButton.bounds.size.width / 2.0
         
-        secondModelWardrobeButton.frame = CGRect(x: weightButtonWardrobe*2, y: view.frame.height - weightButtonWardrobe - 20, width: weightButtonWardrobe, height: weightButtonWardrobe)
+        secondModelWardrobeButton.frame = CGRect(x: weightSystemButton*2, y: view.frame.height - weightSystemButton - 20, width: weightSystemButton, height: weightSystemButton)
         secondModelWardrobeButton.layer.cornerRadius = secondModelWardrobeButton.bounds.size.width / 2.0
         
-        backWardrobeButton.frame = CGRect(x: weightButtonWardrobe*4 - weightButtonWardrobe/2, y: view.frame.height - weightButtonWardrobe - 20, width: weightButtonWardrobe, height: weightButtonWardrobe)
+        backWardrobeButton.frame = CGRect(x: weightSystemButton*4 - weightSystemButton/2, y: view.frame.height - weightSystemButton - 20, width: weightSystemButton, height: weightSystemButton)
         backWardrobeButton.layer.cornerRadius = backWardrobeButton.bounds.size.width / 2.0
         
-        wardrobeButton.frame = CGRect(x: weightButtonWardrobe, y: view.frame.height - weightButtonWardrobe - 20, width: weightButtonWardrobe, height: weightButtonWardrobe)
+        wardrobeButton.frame = CGRect(x: weightSystemButton, y: view.frame.height - weightSystemButton - 20, width: weightSystemButton, height: weightSystemButton)
         wardrobeButton.layer.cornerRadius = wardrobeButton.bounds.size.width / 2.0
         
-        arViewButton.frame = CGRect(x: weightButtonWardrobe*3, y: view.frame.height - weightButtonWardrobe - 20, width: weightButtonWardrobe, height: weightButtonWardrobe)
+        arViewButton.frame = CGRect(x: weightSystemButton*3, y: view.frame.height - weightSystemButton - 20, width: weightSystemButton, height: weightSystemButton)
         arViewButton.layer.cornerRadius = arViewButton.bounds.size.width / 2.0
+        
+        zoomInButton.frame = CGRect(x: view.frame.width - weightZoomButton - 10, y: view.frame.height/3, width: weightZoomButton, height: weightZoomButton)
+        zoomInButton.layer.cornerRadius = zoomInButton.bounds.size.width / 2.0
+        
+        zoomOutButton.frame = CGRect(x: view.frame.width - weightZoomButton - 10, y: view.frame.height/3 + weightZoomButton + 10, width: weightZoomButton, height: weightZoomButton)
+        zoomOutButton.layer.cornerRadius = zoomOutButton.bounds.size.width / 2.0
         
     }
     
     @objc private func tapFirst() {
-        if self.chooseModel != 1 {
-            self.chooseModel = 1
-            self.sceneView.scene = sceneGirl
+        if self.chooseModel != 0 {
+            self.chooseModel = 0
+            
+            if self.sceneGirl != nil {
+                self.sceneView.scene = sceneGirl
+            } else {
+                self.uploadChooseSceneInBackground()
+            }
         }
     }
 
     @objc private func tapSecond() {
-        if self.chooseModel != 2 {
-            self.chooseModel = 2
-            self.sceneView.scene = sceneWraith
+        if self.chooseModel != 1 {
+            self.chooseModel = 1
+            
+            if self.sceneAvatar != nil {
+                self.sceneView.scene = sceneAvatar
+            } else {
+                self.uploadChooseSceneInBackground()
+            }
+        }
+    }
+    
+    func uploadChooseSceneInBackground() {
+        DispatchQueue.global(qos: .default).async {
+            
+            let arrayScene = [SCNScene(named: self.arrayNameScene[self.chooseModel])]
+            
+            self.sceneView.prepare(arrayScene, completionHandler: { (Bool) in
+                
+                print ("uploadChooseSceneInBackground")
+                
+                if self.chooseModel == 0 {
+                    self.sceneGirl = arrayScene[0]
+                    self.sceneView.scene = self.sceneGirl
+                } else {
+                    self.sceneAvatar = arrayScene[0]
+                    self.sceneView.scene = self.sceneAvatar
+                }
+            })
         }
     }
     
@@ -193,6 +246,28 @@ final class GeneralViewController: UIViewController {
         let vc = ArViewController()
         self.navigationController?.pushViewController(vc,
          animated: true)
+    }
+    
+    @objc private func tapZoomIn() {
+//        sceneView.pointOfView?.camera.transform
+//        sceneView.scene?.rootNode.camera
+//        sceneView.scene?.rootNode.scale = SCNVector3(1.2, 1.2, 1.2)
+        
+    }
+    
+    @objc private func tapZoomOut() {
+//        sceneView.scene?.rootNode.scale = SCNVector3(1.2, 1.2, 1.2)
+    }
+    
+    @objc private func rotateDragY(_ gesture: UIPanGestureRecognizer) {
+        
+//        let point = gesture.translation(in: view)
+//        sceneView.scene?.rootNode.runAction(SCNAction.rotateBy(x: 0, y: point.x/10, z: 0, duration: 0))
+        
+        let velocity = gesture.velocity(in: view)
+        sceneView.scene?.rootNode.runAction(SCNAction.rotateBy(x: 0, y: 0, z: velocity.x/1000, duration: 0))
+        
+        gesture.setTranslation(.zero, in: view)
     }
     
     private func changeMode() {

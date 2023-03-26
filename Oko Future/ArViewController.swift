@@ -18,6 +18,7 @@ class ArViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.setHidesBackButton(false, animated:false)
         view.addSubview(arView)
         
         guard let referenceImages = ARReferenceImage.referenceImages(
