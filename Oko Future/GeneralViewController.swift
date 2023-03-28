@@ -23,6 +23,7 @@ final class GeneralViewController: UIViewController {
     
     public var sceneView: SCNView = {
         let scn = SCNView()
+        scn.allowsCameraControl = true
         scn.autoenablesDefaultLighting = true
         scn.showsStatistics = true
         scn.antialiasingMode = .multisampling2X
@@ -30,8 +31,11 @@ final class GeneralViewController: UIViewController {
         return scn
     }()
     
-    public var sceneGirl: SCNScene? = nil
-    public var sceneAvatar: SCNScene? = nil
+//    public var sceneGirl: SCNScene? = nil
+//    public var sceneAvatar: SCNScene? = nil
+    
+    public var nodeGirl: SCNNode? = nil
+    public var nodeAvatar: SCNNode? = nil
     
     private let zoomInButton: UIButton = {
         let btn = UIButton()
@@ -122,9 +126,9 @@ final class GeneralViewController: UIViewController {
         super.didReceiveMemoryWarning()
         
         if self.chooseModel == 0 {
-            self.sceneAvatar = nil
+            self.nodeAvatar = nil
         } else {
-            self.sceneGirl = nil
+            self.nodeGirl = nil
         }
     }
     
@@ -142,8 +146,8 @@ final class GeneralViewController: UIViewController {
         view.addSubview(zoomInButton)
         view.addSubview(zoomOutButton)
         
-        let dragRotateGesture = UIPanGestureRecognizer(target: self, action: #selector(rotateDragY))
-        sceneView.addGestureRecognizer(dragRotateGesture)
+//        let dragRotateGesture = UIPanGestureRecognizer(target: self, action: #selector(rotateDragY))
+//        sceneView.addGestureRecognizer(dragRotateGesture)
         
         firstModelWardrobeButton.addTarget(self, action: #selector(tapFirst), for: .touchUpInside)
         secondModelWardrobeButton.addTarget(self, action: #selector(tapSecond), for: .touchUpInside)
@@ -192,8 +196,9 @@ final class GeneralViewController: UIViewController {
         if self.chooseModel != 0 {
             self.chooseModel = 0
             
-            if self.sceneGirl != nil {
-                self.sceneView.scene = sceneGirl
+            if self.nodeGirl != nil {
+                self.sceneView.scene?.rootNode.childNodes[1].removeFromParentNode()
+                self.sceneView.scene?.rootNode.addChildNode(self.nodeGirl!)
             } else {
                 self.uploadChooseSceneInBackground()
             }
@@ -204,8 +209,9 @@ final class GeneralViewController: UIViewController {
         if self.chooseModel != 1 {
             self.chooseModel = 1
             
-            if self.sceneAvatar != nil {
-                self.sceneView.scene = sceneAvatar
+            if self.nodeAvatar != nil {
+                self.sceneView.scene?.rootNode.childNodes[1].removeFromParentNode()
+                self.sceneView.scene?.rootNode.addChildNode(self.nodeAvatar!)
             } else {
                 self.uploadChooseSceneInBackground()
             }
@@ -215,19 +221,20 @@ final class GeneralViewController: UIViewController {
     func uploadChooseSceneInBackground() {
         DispatchQueue.global(qos: .default).async {
             
-            let arrayScene = [SCNScene(named: self.arrayNameScene[self.chooseModel])]
+            let arrayNode = [SCNScene(named: self.arrayNameScene[self.chooseModel])!.rootNode]
             
-            self.sceneView.prepare(arrayScene, completionHandler: { (Bool) in
+            self.sceneView.prepare(arrayNode, completionHandler: { (Bool) in
                 
                 print ("uploadChooseSceneInBackground")
                 
                 if self.chooseModel == 0 {
-                    self.sceneGirl = arrayScene[0]
-                    self.sceneView.scene = self.sceneGirl
+                    self.nodeGirl = arrayNode[0]
                 } else {
-                    self.sceneAvatar = arrayScene[0]
-                    self.sceneView.scene = self.sceneAvatar
+                    self.nodeAvatar = arrayNode[0]
                 }
+                
+                self.sceneView.scene?.rootNode.childNodes[1].removeFromParentNode()
+                self.sceneView.scene?.rootNode.addChildNode(arrayNode[0])
             })
         }
     }
@@ -265,7 +272,7 @@ final class GeneralViewController: UIViewController {
 //        sceneView.scene?.rootNode.runAction(SCNAction.rotateBy(x: 0, y: point.x/10, z: 0, duration: 0))
         
         let velocity = gesture.velocity(in: view)
-        sceneView.scene?.rootNode.runAction(SCNAction.rotateBy(x: 0, y: 0, z: velocity.x/1000, duration: 0))
+        sceneView.scene?.rootNode.childNodes[1].runAction(SCNAction.rotateBy(x: 0, y: 0, z: velocity.x/1000, duration: 0))
         
         gesture.setTranslation(.zero, in: view)
     }

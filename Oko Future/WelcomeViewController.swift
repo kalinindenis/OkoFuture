@@ -31,19 +31,30 @@ final class WelcomeViewController: UIViewController {
             
         let generalVC = GeneralViewController()
         
-        guard let sceneAvatar = SCNScene(named: generalVC.arrayNameScene[1]), let sceneGirl = SCNScene(named: generalVC.arrayNameScene[0])else {
-                return
-            }
+        generalVC.sceneView.scene = SCNScene()
         
-        let sceneArray = [sceneGirl, sceneAvatar]
+        let sceneAvatar = SCNScene(named: generalVC.arrayNameScene[1])
+        let sceneGirl = SCNScene(named: generalVC.arrayNameScene[0])
         
-        generalVC.sceneView.prepare(sceneArray, completionHandler: { (Bool) in
+        let box = SCNBox(width: 1, height: 0.2, length: 1, chamferRadius: 0)
+        box.firstMaterial?.diffuse.contents = UIColor.red
+        box.firstMaterial?.isDoubleSided = true
+        
+        let nodeGirl = sceneGirl!.rootNode
+        let nodeAvatar = sceneAvatar!.rootNode
+        
+        let boxNode = SCNNode(geometry: box)
+        boxNode.position = SCNVector3(0, -0.2, 0)
+        let nodeArray = [boxNode , nodeGirl , nodeAvatar]
+        
+        generalVC.sceneView.prepare(nodeArray, completionHandler: { (Bool) in
             
             print ("uploadScene")
-            generalVC.sceneAvatar = sceneArray[1]
-            generalVC.sceneGirl = sceneArray[0]
+            generalVC.nodeAvatar = nodeArray[2]
+            generalVC.nodeGirl = nodeArray[1]
             
-            generalVC.sceneView.scene = sceneArray[generalVC.chooseModel]
+            generalVC.sceneView.scene?.rootNode.addChildNode(nodeArray[0])
+            generalVC.sceneView.scene?.rootNode.addChildNode(nodeArray[1])
             
             self.navigationController?.pushViewController(generalVC,
                 animated: true)
