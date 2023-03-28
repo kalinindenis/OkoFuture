@@ -221,7 +221,7 @@ final class GeneralViewController: UIViewController {
     func uploadChooseSceneInBackground() {
         DispatchQueue.global(qos: .default).async {
             
-            let arrayNode = [SCNScene(named: self.arrayNameScene[self.chooseModel])!.rootNode]
+            let arrayNode = [SCNScene(named: self.arrayNameScene[self.chooseModel])!.rootNode.childNode(withName: self.chooseModel==0 ? "iddle_skale" : "Avatar", recursively: true)!]
             
             self.sceneView.prepare(arrayNode, completionHandler: { (Bool) in
                 

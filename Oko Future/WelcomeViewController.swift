@@ -31,34 +31,38 @@ final class WelcomeViewController: UIViewController {
             
         let generalVC = GeneralViewController()
         
-        generalVC.sceneView.scene = SCNScene()
-        
-        let sceneAvatar = SCNScene(named: generalVC.arrayNameScene[1])
-        let sceneGirl = SCNScene(named: generalVC.arrayNameScene[0])
-        
-        let box = SCNBox(width: 1, height: 0.2, length: 1, chamferRadius: 0)
-        box.firstMaterial?.diffuse.contents = UIColor.red
-        box.firstMaterial?.isDoubleSided = true
-        
-        let nodeGirl = sceneGirl!.rootNode
-        let nodeAvatar = sceneAvatar!.rootNode
-        
-        let boxNode = SCNNode(geometry: box)
-        boxNode.position = SCNVector3(0, -0.2, 0)
-        let nodeArray = [boxNode , nodeGirl , nodeAvatar]
-        
-        generalVC.sceneView.prepare(nodeArray, completionHandler: { (Bool) in
+        DispatchQueue.global(qos: .default).async {
             
-            print ("uploadScene")
-            generalVC.nodeAvatar = nodeArray[2]
-            generalVC.nodeGirl = nodeArray[1]
+            generalVC.sceneView.scene = SCNScene()
             
-            generalVC.sceneView.scene?.rootNode.addChildNode(nodeArray[0])
-            generalVC.sceneView.scene?.rootNode.addChildNode(nodeArray[1])
+            let sceneAvatar = SCNScene(named: generalVC.arrayNameScene[1])
+            let sceneGirl = SCNScene(named: generalVC.arrayNameScene[0])
             
-            self.navigationController?.pushViewController(generalVC,
-                animated: true)
-        })
+            let box = SCNBox(width: 1, height: 0.2, length: 1, chamferRadius: 0)
+            box.firstMaterial?.diffuse.contents = UIColor.red
+            box.firstMaterial?.isDoubleSided = true
+            
+            let nodeGirl = sceneGirl!.rootNode.childNode(withName: "iddle_skale", recursively: true)!
+            let nodeAvatar = sceneAvatar!.rootNode.childNode(withName: "Avatar", recursively: true)!
+            
+            let boxNode = SCNNode(geometry: box)
+            boxNode.position = SCNVector3(0, -0.2, 0)
+            let nodeArray = [boxNode , nodeGirl , nodeAvatar]
+            
+            generalVC.sceneView.prepare(nodeArray, completionHandler: { (Bool) in
+                
+                print ("uploadScene")
+                generalVC.nodeAvatar = nodeArray[2]
+                generalVC.nodeGirl = nodeArray[1]
+                
+                generalVC.sceneView.scene?.rootNode.addChildNode(nodeArray[0])
+                generalVC.sceneView.scene?.rootNode.addChildNode(nodeArray[1])
+                
+                self.navigationController?.pushViewController(generalVC,
+                    animated: true)
+            })
+        }
+        
     }
     
 }
