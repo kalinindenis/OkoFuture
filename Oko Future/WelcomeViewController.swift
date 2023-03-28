@@ -7,6 +7,8 @@
 
 import UIKit
 import SceneKit
+import Combine
+import RealityKit
 
 final class WelcomeViewController: UIViewController {
     
@@ -31,37 +33,43 @@ final class WelcomeViewController: UIViewController {
             
         let generalVC = GeneralViewController()
         
-        DispatchQueue.global(qos: .default).async {
-            
-            generalVC.sceneView.scene = SCNScene()
-            
-            let sceneAvatar = SCNScene(named: generalVC.arrayNameScene[1])
-            let sceneGirl = SCNScene(named: generalVC.arrayNameScene[0])
-            
-            let box = SCNBox(width: 1, height: 0.2, length: 1, chamferRadius: 0)
-            box.firstMaterial?.diffuse.contents = UIColor.red
-            box.firstMaterial?.isDoubleSided = true
-            
-            let nodeGirl = sceneGirl!.rootNode.childNode(withName: "iddle_skale", recursively: true)!
-            let nodeAvatar = sceneAvatar!.rootNode.childNode(withName: "Avatar", recursively: true)!
-            
-            let boxNode = SCNNode(geometry: box)
-            boxNode.position = SCNVector3(0, -0.2, 0)
-            let nodeArray = [boxNode , nodeGirl , nodeAvatar]
-            
-            generalVC.sceneView.prepare(nodeArray, completionHandler: { (Bool) in
+        let anchor = AnchorEntity(world: [0,-1,0])
+        generalVC.sceneView.scene.addAnchor(anchor)
+        
+        let box: MeshResource = .generateBox(size: SIMD3(x: 1, y: 0.1, z: 1))
+        let material = SimpleMaterial(color: .systemRed, isMetallic: false)
+        
+        let entity = ModelEntity(mesh: box, materials: [material])
+        
+        anchor.addChild(entity)
+        
+        var cancellable: AnyCancellable? = nil
+        
+          cancellable = ModelEntity.loadModelAsync(named: generalVC.arrayNameScene[1])
+            .sink(receiveCompletion: { error in
+              print("Unexpected error: \(error)")
+              cancellable?.cancel()
+            }, receiveValue: { entity in
+
+                entity.setScale(SIMD3(x: 0.1, y: 0.1, z: 0.1), relativeTo: entity)
+
+                generalVC.nodeAvatar = entity
                 
-                print ("uploadScene")
-                generalVC.nodeAvatar = nodeArray[2]
-                generalVC.nodeGirl = nodeArray[1]
-                
-                generalVC.sceneView.scene?.rootNode.addChildNode(nodeArray[0])
-                generalVC.sceneView.scene?.rootNode.addChildNode(nodeArray[1])
-                
-                self.navigationController?.pushViewController(generalVC,
-                    animated: true)
+                cancellable = ModelEntity.loadModelAsync(named: generalVC.arrayNameScene[0])
+                  .sink(receiveCompletion: { error in
+                    print("Unexpected error: \(error)")
+                    cancellable?.cancel()
+                  }, receiveValue: { entity in
+
+                      generalVC.nodeGirl = entity
+                      
+                      anchor.addChild(entity)
+
+                      self.navigationController?.pushViewController(generalVC, animated: true)
+
+                      cancellable?.cancel()
+                  })
             })
-        }
         
     }
     
