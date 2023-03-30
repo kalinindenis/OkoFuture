@@ -16,6 +16,15 @@
 		920BF13F29CC43CC001D40DA /* wraith.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 920BF13D29CC43CC001D40DA /* wraith.usdz */; };
 		920BF14129CC623D001D40DA /* ArViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920BF14029CC623D001D40DA /* ArViewController.swift */; };
 		920BF14329CC804A001D40DA /* hd1833.mov in Resources */ = {isa = PBXBuildFile; fileRef = 920BF14229CC804A001D40DA /* hd1833.mov */; };
+		922CEB3229D450FC002326F8 /* excited_transition.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB2C29D450F5002326F8 /* excited_transition.mov */; };
+		922CEB3329D450FC002326F8 /* poker_face_transition.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB2D29D450F6002326F8 /* poker_face_transition.mov */; };
+		922CEB3429D450FC002326F8 /* excited.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB2E29D450F8002326F8 /* excited.mov */; };
+		922CEB3529D450FC002326F8 /* shocked_transition.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB2F29D450F8002326F8 /* shocked_transition.mov */; };
+		922CEB3729D450FC002326F8 /* shocked.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB3129D450FC002326F8 /* shocked.mov */; };
+		922CEB3929D45A41002326F8 /* poker_face.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB3829D45A41002326F8 /* poker_face.mov */; };
+		922CEB3B29D4771E002326F8 /* puppets_with_alpha_hevc.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB3A29D4771E002326F8 /* puppets_with_alpha_hevc.mov */; };
+		922CEB3D29D47DD8002326F8 /* poker_face_black.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB3C29D47DD8002326F8 /* poker_face_black.mov */; };
+		922CEB3F29D47ED8002326F8 /* poker_face_black_1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB3E29D47ED8002326F8 /* poker_face_black_1.mov */; };
 		9292EE3029D09A4500526C07 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */; };
 		92C377DE29CDD2170024DD85 /* avatar.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 92C377DD29CDD2170024DD85 /* avatar.usdz */; };
 /* End PBXBuildFile section */
@@ -32,6 +41,15 @@
 		920BF13D29CC43CC001D40DA /* wraith.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = wraith.usdz; sourceTree = "<group>"; };
 		920BF14029CC623D001D40DA /* ArViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArViewController.swift; sourceTree = "<group>"; };
 		920BF14229CC804A001D40DA /* hd1833.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = hd1833.mov; sourceTree = "<group>"; };
+		922CEB2C29D450F5002326F8 /* excited_transition.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = excited_transition.mov; sourceTree = "<group>"; };
+		922CEB2D29D450F6002326F8 /* poker_face_transition.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = poker_face_transition.mov; sourceTree = "<group>"; };
+		922CEB2E29D450F8002326F8 /* excited.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = excited.mov; sourceTree = "<group>"; };
+		922CEB2F29D450F8002326F8 /* shocked_transition.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = shocked_transition.mov; sourceTree = "<group>"; };
+		922CEB3129D450FC002326F8 /* shocked.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = shocked.mov; sourceTree = "<group>"; };
+		922CEB3829D45A41002326F8 /* poker_face.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = poker_face.mov; sourceTree = "<group>"; };
+		922CEB3A29D4771E002326F8 /* puppets_with_alpha_hevc.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = puppets_with_alpha_hevc.mov; sourceTree = "<group>"; };
+		922CEB3C29D47DD8002326F8 /* poker_face_black.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = poker_face_black.mov; sourceTree = "<group>"; };
+		922CEB3E29D47ED8002326F8 /* poker_face_black_1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = poker_face_black_1.mov; sourceTree = "<group>"; };
 		9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		92C377DD29CDD2170024DD85 /* avatar.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = avatar.usdz; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -50,6 +68,15 @@
 		920BF11C29CC3D33001D40DA = {
 			isa = PBXGroup;
 			children = (
+				922CEB3E29D47ED8002326F8 /* poker_face_black_1.mov */,
+				922CEB3C29D47DD8002326F8 /* poker_face_black.mov */,
+				922CEB3A29D4771E002326F8 /* puppets_with_alpha_hevc.mov */,
+				922CEB3829D45A41002326F8 /* poker_face.mov */,
+				922CEB2C29D450F5002326F8 /* excited_transition.mov */,
+				922CEB2E29D450F8002326F8 /* excited.mov */,
+				922CEB2D29D450F6002326F8 /* poker_face_transition.mov */,
+				922CEB2F29D450F8002326F8 /* shocked_transition.mov */,
+				922CEB3129D450FC002326F8 /* shocked.mov */,
 				92C377DD29CDD2170024DD85 /* avatar.usdz */,
 				920BF14229CC804A001D40DA /* hd1833.mov */,
 				920BF13C29CC43CC001D40DA /* Girlo.usdz */,
@@ -140,6 +167,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				922CEB3F29D47ED8002326F8 /* poker_face_black_1.mov in Resources */,
+				922CEB3D29D47DD8002326F8 /* poker_face_black.mov in Resources */,
+				922CEB3B29D4771E002326F8 /* puppets_with_alpha_hevc.mov in Resources */,
+				922CEB3929D45A41002326F8 /* poker_face.mov in Resources */,
+				922CEB3229D450FC002326F8 /* excited_transition.mov in Resources */,
+				922CEB3329D450FC002326F8 /* poker_face_transition.mov in Resources */,
+				922CEB3429D450FC002326F8 /* excited.mov in Resources */,
+				922CEB3529D450FC002326F8 /* shocked_transition.mov in Resources */,
+				922CEB3729D450FC002326F8 /* shocked.mov in Resources */,
 				92C377DE29CDD2170024DD85 /* avatar.usdz in Resources */,
 				920BF14329CC804A001D40DA /* hd1833.mov in Resources */,
 				920BF13E29CC43CC001D40DA /* Girlo.usdz in Resources */,

@@ -9,6 +9,7 @@ import UIKit
 import SceneKit
 import RealityKit
 import Combine
+import AVFoundation
 
 enum AvatarMode {
     case general
@@ -20,6 +21,8 @@ final class GeneralViewController: UIViewController {
     public var chooseModel = 0
     
     public let arrayNameScene = ["Girlo.usdz", "avatar.usdz"]
+    
+    private var videoPlayerEmoji = AVPlayer()
     
     private var mode: AvatarMode = .general
     
@@ -131,7 +134,7 @@ final class GeneralViewController: UIViewController {
     
     private func setupView() {
         
-        view.backgroundColor = UIColor.systemMint
+        view.backgroundColor = UIColor.systemRed
         view.addSubview(sceneView)
         view.addSubview(firstModelWardrobeButton)
         view.addSubview(secondModelWardrobeButton)
@@ -257,14 +260,50 @@ final class GeneralViewController: UIViewController {
     }
     
     @objc private func tapZoomIn() {
-//        sceneView.pointOfView?.camera.transform
-//        sceneView.scene?.rootNode.camera
-//        sceneView.scene?.rootNode.scale = SCNVector3(1.2, 1.2, 1.2)
+        let transform = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: SIMD3(x: 0, y: -1, z: 1))
+        self.sceneView.scene.anchors[0].move(to: transform, relativeTo: nil, duration: 1)
         
+        self.startDemo()
     }
     
     @objc private func tapZoomOut() {
 //        sceneView.scene?.rootNode.scale = SCNVector3(1.2, 1.2, 1.2)
+        
+        let transform = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: SIMD3(x: 0, y: -1, z: 0))
+        self.sceneView.scene.anchors[0].move(to: transform, relativeTo: nil, duration: 1)
+        
+        self.stopDemo()
+    }
+    
+    private func startDemo() {
+        
+        guard let alphaMovieURL = Bundle.main.url(forResource: "puppets_with_alpha_hevc", withExtension: "mov") else {
+            print("Failed to overlay alpha movie on the background")
+            return
+        }
+        
+        self.videoPlayerEmoji = AVPlayer(url: alphaMovieURL)
+        let videoMaterial = VideoMaterial(avPlayer: self.videoPlayerEmoji)
+        
+        let videoPlane = ModelEntity(mesh: .generatePlane(width: 0.3, depth: 0.3, cornerRadius: 0), materials: [videoMaterial])
+        
+        videoPlane.transform.translation = SIMD3(x: 0, y: 1, z: 0.1)
+        videoPlane.transform.rotation = simd_quatf(angle: 1.57, axis: SIMD3(x: 1, y: 0, z: 0))
+        
+        self.sceneView.scene.anchors[0].addChild(videoPlane)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+            self.videoPlayerEmoji.play()
+            
+            
+            self.nodeGirl?.playAnimation((self.nodeGirl?.availableAnimations[0])!)
+        })
+    }
+    
+    private func stopDemo() {
+        self.sceneView.scene.anchors[0].children[2].removeFromParent()
+        self.nodeGirl?.stopAllAnimations()
+        self.videoPlayerEmoji.pause()
     }
     
     @objc private func rotateDragY(_ gesture: UIPanGestureRecognizer) {
