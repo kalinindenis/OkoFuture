@@ -26,7 +26,6 @@
 		922CEB3D29D47DD8002326F8 /* poker_face_black.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB3C29D47DD8002326F8 /* poker_face_black.mov */; };
 		922CEB3F29D47ED8002326F8 /* poker_face_black_1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB3E29D47ED8002326F8 /* poker_face_black_1.mov */; };
 		9292EE3029D09A4500526C07 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */; };
-		92C377DE29CDD2170024DD85 /* avatar.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 92C377DD29CDD2170024DD85 /* avatar.usdz */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -176,7 +175,6 @@
 				922CEB3429D450FC002326F8 /* excited.mov in Resources */,
 				922CEB3529D450FC002326F8 /* shocked_transition.mov in Resources */,
 				922CEB3729D450FC002326F8 /* shocked.mov in Resources */,
-				92C377DE29CDD2170024DD85 /* avatar.usdz in Resources */,
 				920BF14329CC804A001D40DA /* hd1833.mov in Resources */,
 				920BF13E29CC43CC001D40DA /* Girlo.usdz in Resources */,
 				920BF13F29CC43CC001D40DA /* wraith.usdz in Resources */,
