@@ -26,11 +26,13 @@ final class GeneralViewController: UIViewController {
     
     private var mode: AvatarMode = .general
     
+    private var demoEmoji = false
+    
     public var sceneView: ARView = {
         let scn = ARView()
         scn.cameraMode = .nonAR
         scn.backgroundColor = .clear
-        scn.debugOptions = .showStatistics
+//        scn.debugOptions = .showStatistics
         return scn
     }()
     
@@ -210,10 +212,10 @@ final class GeneralViewController: UIViewController {
             self.chooseModel = 1
             
             if self.nodeAvatar != nil {
-                self.sceneView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
-                self.sceneView.scene.anchors[0].addChild(self.nodeAvatar!)
+//                self.sceneView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
+//                self.sceneView.scene.anchors[0].addChild(self.nodeAvatar!)
             } else {
-                self.uploadChooseSceneInBackground()
+//                self.uploadChooseSceneInBackground()
             }
         }
     }
@@ -267,7 +269,6 @@ final class GeneralViewController: UIViewController {
     }
     
     @objc private func tapZoomOut() {
-//        sceneView.scene?.rootNode.scale = SCNVector3(1.2, 1.2, 1.2)
         
         let transform = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: SIMD3(x: 0, y: -1, z: 0))
         self.sceneView.scene.anchors[0].move(to: transform, relativeTo: nil, duration: 1)
@@ -277,33 +278,46 @@ final class GeneralViewController: UIViewController {
     
     private func startDemo() {
         
-        guard let alphaMovieURL = Bundle.main.url(forResource: "puppets_with_alpha_hevc", withExtension: "mov") else {
+        guard let path = Bundle.main.path(forResource: "excited", ofType: "mov") else {
             print("Failed to overlay alpha movie on the background")
             return
         }
         
-        self.videoPlayerEmoji = AVPlayer(url: alphaMovieURL)
+        let videoURL = URL(fileURLWithPath: path)
+        let alphaMovieURL = try! URL.init(resolvingAliasFileAt: videoURL, options: .withoutMounting)
+        let playerItem = AVPlayerItem(url: alphaMovieURL)
+        self.videoPlayerEmoji = AVPlayer(playerItem: playerItem)
         let videoMaterial = VideoMaterial(avPlayer: self.videoPlayerEmoji)
         
         let videoPlane = ModelEntity(mesh: .generatePlane(width: 0.3, depth: 0.3, cornerRadius: 0), materials: [videoMaterial])
         
-        videoPlane.transform.translation = SIMD3(x: 0, y: 1, z: 0.1)
-        videoPlane.transform.rotation = simd_quatf(angle: 1.57, axis: SIMD3(x: 1, y: 0, z: 0))
+        videoPlane.transform.translation = SIMD3(x: 0, y: 0.9, z: -0.2)
+        videoPlane.transform.rotation = simd_quatf(angle: 1.5708, axis: SIMD3(x: 1, y: 0, z: 0))
         
         self.sceneView.scene.anchors[0].addChild(videoPlane)
         
+        self.demoEmoji.toggle()
+        /// 1.AVQueuePlayer 2.освещение
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
-            self.videoPlayerEmoji.play()
             
+            let transform = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: SIMD3(x: 0, y: 0.3, z: 0))
+            videoPlane.move(to: transform, relativeTo: videoPlane, duration: 0.1)
+            
+            self.videoPlayerEmoji.play()
             
             self.nodeGirl?.playAnimation((self.nodeGirl?.availableAnimations[0])!)
         })
     }
     
     private func stopDemo() {
-        self.sceneView.scene.anchors[0].children[2].removeFromParent()
-        self.nodeGirl?.stopAllAnimations()
-        self.videoPlayerEmoji.pause()
+        if self.demoEmoji {
+            self.sceneView.scene.anchors[0].children[2].removeFromParent()
+            self.nodeGirl?.stopAllAnimations()
+            self.videoPlayerEmoji.pause()
+            
+            self.demoEmoji.toggle()
+        }
     }
     
     @objc private func rotateDragY(_ gesture: UIPanGestureRecognizer) {
